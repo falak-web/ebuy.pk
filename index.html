@@ -1,1 +1,345 @@
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ff5a1f">
+<meta name="description" content="ShopX — modern Pakistani online marketplace template">
+<title>ShopX — Pakistan's Modern Marketplace</title>
+<style>
+:root{
+  --primary:#ff5a1f;--primary2:#ff7a45;--dark:#111827;--muted:#6b7280;
+  --bg:#f5f7fb;--card:#fff;--line:#e5e7eb;--green:#16a34a;
+  --shadow:0 10px 35px rgba(15,23,42,.08);--radius:18px
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--dark);line-height:1.5}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+a{text-decoration:none;color:inherit}
+.container{width:min(1240px,calc(100% - 32px));margin:auto}
+.topbar{background:#111827;color:#fff;font-size:13px;padding:8px 0}
+.topbar .row,.nav .row{display:flex;align-items:center;justify-content:space-between;gap:15px}
+.toplinks{display:flex;gap:18px;flex-wrap:wrap;color:#d1d5db}
+.nav{background:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 18px rgba(0,0,0,.06)}
+.navmain{height:76px;display:flex;align-items:center;gap:20px}
+.logo{font-size:28px;font-weight:900;letter-spacing:-1.5px;color:var(--primary);white-space:nowrap}
+.logo span{color:#111827}
+.search{flex:1;display:flex;background:#f3f4f6;border:2px solid transparent;border-radius:13px;overflow:hidden}
+.search:focus-within{border-color:#ffd0bf;background:#fff}
+.search input{flex:1;border:0;outline:0;background:transparent;padding:13px 16px;font-size:15px}
+.search button{background:var(--primary);color:#fff;padding:0 20px;font-weight:800}
+.actions{display:flex;align-items:center;gap:8px}
+.iconbtn{width:44px;height:44px;border-radius:12px;background:#f3f4f6;position:relative;display:grid;place-items:center;font-size:20px}
+.badge{position:absolute;right:-3px;top:-5px;background:var(--primary);color:#fff;border:2px solid #fff;border-radius:99px;min-width:20px;height:20px;font-size:11px;display:grid;place-items:center;font-weight:800}
+.categories{background:#fff;border-top:1px solid var(--line);overflow:auto}
+.catrow{display:flex;gap:8px;padding:10px 0;white-space:nowrap}
+.cat{padding:9px 14px;border-radius:999px;font-size:14px;font-weight:700;color:#4b5563}
+.cat:hover,.cat.active{background:#fff0ea;color:var(--primary)}
+.hero{padding:28px 0 18px}
+.heroGrid{display:grid;grid-template-columns:1.65fr .8fr;gap:18px}
+.heroMain{min-height:380px;border-radius:26px;overflow:hidden;position:relative;background:linear-gradient(135deg,#161b2d,#ff5a1f);color:#fff;padding:48px;display:flex;align-items:center}
+.heroMain:after{content:"";position:absolute;width:380px;height:380px;border-radius:50%;right:-100px;top:-100px;background:rgba(255,255,255,.12)}
+.heroContent{position:relative;z-index:2;max-width:570px}
+.eyebrow{display:inline-flex;background:rgba(255,255,255,.14);padding:7px 12px;border-radius:99px;font-size:13px;font-weight:800;margin-bottom:16px}
+.hero h1{font-size:clamp(38px,5vw,65px);line-height:.98;letter-spacing:-3px;margin-bottom:18px}
+.hero p{color:#f3f4f6;max-width:500px;margin-bottom:25px}
+.btn{padding:12px 18px;border-radius:12px;font-weight:800;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{transform:translateY(-2px)}
+.btn.primary{background:var(--primary);color:#fff}
+.btn.white{background:#fff;color:#111827}
+.btn.dark{background:#111827;color:#fff}
+.heroSide{display:grid;gap:18px}
+.miniBanner{border-radius:22px;padding:25px;min-height:181px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow)}
+.miniBanner.one{background:linear-gradient(135deg,#7c3aed,#c026d3)}
+.miniBanner.two{background:linear-gradient(135deg,#059669,#0f766e)}
+.section{padding:28px 0}
+.sectionHead{display:flex;justify-content:space-between;align-items:end;margin-bottom:17px;gap:15px}
+.sectionHead h2{font-size:26px;letter-spacing:-1px}
+.sectionHead p{color:var(--muted);font-size:14px}
+.view{color:var(--primary);font-weight:800;font-size:14px}
+.categoryGrid{display:grid;grid-template-columns:repeat(8,1fr);gap:12px}
+.categoryCard{background:#fff;border:1px solid var(--line);border-radius:17px;padding:18px 10px;text-align:center;transition:.2s}
+.categoryCard:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:#ffd0bf}
+.categoryIcon{font-size:31px;margin-bottom:8px}.categoryCard b{font-size:13px}
+.flash{background:#111827;border-radius:25px;padding:24px;color:#fff}
+.flashTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.timer{display:flex;gap:7px}.time{background:#2b3345;padding:8px 10px;border-radius:9px;text-align:center;min-width:47px;font-weight:900}.time small{display:block;color:#9ca3af;font-size:9px}
+.productGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:15px}
+.product{background:var(--card);border:1px solid var(--line);border-radius:17px;overflow:hidden;position:relative;transition:.2s}
+.product:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+.productImg{height:190px;background:#f3f4f6;display:grid;place-items:center;font-size:70px;position:relative}
+.sale{position:absolute;left:10px;top:10px;background:#fee2e2;color:#dc2626;padding:5px 8px;border-radius:7px;font-size:11px;font-weight:900}
+.wish{position:absolute;right:9px;top:9px;width:35px;height:35px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:17px;box-shadow:0 4px 12px #0001}
+.productBody{padding:13px}
+.productName{font-weight:750;font-size:14px;height:43px;overflow:hidden}
+.rating{font-size:12px;margin:7px 0;color:#f59e0b}.rating span{color:#6b7280}
+.price{font-weight:950;font-size:19px}.old{font-size:12px;text-decoration:line-through;color:#9ca3af;margin-left:5px}
+.add{width:100%;margin-top:10px;background:#fff0ea;color:var(--primary);padding:10px;border-radius:10px;font-weight:900}
+.add:hover{background:var(--primary);color:#fff}
+.features{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.feature{background:#fff;border:1px solid var(--line);padding:19px;border-radius:16px;display:flex;gap:13px;align-items:center}
+.featureIcon{font-size:27px}.feature b{display:block;font-size:14px}.feature span{font-size:12px;color:var(--muted)}
+.bannerGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.wideBanner{min-height:190px;border-radius:22px;padding:30px;background:#e0f2fe;display:flex;justify-content:space-between;align-items:center;overflow:hidden}
+.wideBanner:nth-child(2){background:#fef3c7}.wideBanner h3{font-size:27px}.wideBanner .emoji{font-size:85px}
+footer{background:#111827;color:#d1d5db;margin-top:35px}
+.footerGrid{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:35px;padding:45px 0}
+footer h3,footer h4{color:#fff;margin-bottom:13px}footer p,footer a{font-size:13px;color:#9ca3af;display:block;margin:7px 0}
+.footerBottom{border-top:1px solid #293244;padding:17px 0;font-size:12px;display:flex;justify-content:space-between}
+.overlay{position:fixed;inset:0;background:#0008;z-index:100;display:none}.overlay.show{display:block}
+.drawer{position:fixed;right:0;top:0;height:100%;width:min(440px,100%);background:#fff;z-index:101;transform:translateX(100%);transition:.3s;display:flex;flex-direction:column}
+.drawer.show{transform:translateX(0)}
+.drawerHead{padding:19px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.drawerBody{flex:1;overflow:auto;padding:15px}
+.cartItem{display:grid;grid-template-columns:62px 1fr auto;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.cartImg{width:62px;height:62px;background:#f3f4f6;border-radius:11px;display:grid;place-items:center;font-size:28px}
+.qty{display:flex;align-items:center;gap:9px;margin-top:7px}.qty button{width:27px;height:27px;border-radius:7px;background:#f3f4f6}
+.drawerFoot{padding:18px;border-top:1px solid var(--line)}.total{display:flex;justify-content:space-between;font-size:20px;font-weight:900;margin-bottom:13px}
+.modal{position:fixed;inset:0;z-index:110;background:#0008;display:none;place-items:center;padding:15px}.modal.show{display:grid}
+.modalBox{background:#fff;border-radius:22px;width:min(900px,100%);max-height:92vh;overflow:auto;position:relative;padding:25px}
+.close{width:38px;height:38px;border-radius:50%;background:#f3f4f6;display:grid;place-items:center;font-size:20px}
+.productDetail{display:grid;grid-template-columns:1fr 1fr;gap:25px}.detailImg{min-height:390px;background:#f4f5f7;border-radius:18px;display:grid;place-items:center;font-size:150px}
+.detail h2{font-size:32px;line-height:1.05;margin:10px 0}.detailPrice{font-size:31px;font-weight:950;margin:12px 0}.detail p{color:var(--muted);margin:12px 0}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:13px 0}.chip{padding:8px 11px;border-radius:8px;background:#f3f4f6;font-size:12px;font-weight:700}
+.toast{position:fixed;right:20px;bottom:25px;background:#111827;color:#fff;padding:13px 17px;border-radius:12px;z-index:300;transform:translateY(100px);opacity:0;transition:.3s;box-shadow:var(--shadow)}.toast.show{transform:none;opacity:1}
+.mobileBottom{display:none}
+.empty{text-align:center;padding:55px 15px;color:var(--muted)}
+.searchResults{position:absolute;top:58px;left:0;right:0;background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);display:none;z-index:70;max-height:360px;overflow:auto}
+.searchWrap{position:relative;flex:1}.searchWrap .search{width:100%}
+.result{padding:11px 15px;display:flex;gap:10px;align-items:center;border-bottom:1px solid #f1f1f1}.result:hover{background:#f9fafb}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.filter{background:#fff;border:1px solid var(--line);padding:9px 12px;border-radius:10px}
+@media(max-width:1050px){.categoryGrid{grid-template-columns:repeat(4,1fr)}.productGrid{grid-template-columns:repeat(4,1fr)}.heroGrid{grid-template-columns:1fr}.heroSide{grid-template-columns:1fr 1fr}.footerGrid{grid-template-columns:2fr repeat(2,1fr)}}
+@media(max-width:760px){
+ .container{width:min(100% - 22px,600px)}.topbar{display:none}.navmain{height:auto;padding:10px 0;flex-wrap:wrap}.logo{font-size:24px}.actions{margin-left:auto}.searchWrap{order:3;flex-basis:100%}.searchResults{top:52px}.categories{display:none}
+ .hero{padding-top:15px}.heroMain{min-height:430px;padding:30px 23px;border-radius:22px}.hero h1{font-size:43px;letter-spacing:-2px}.heroSide{grid-template-columns:1fr 1fr}.miniBanner{min-height:150px;padding:17px}
+ .categoryGrid{grid-template-columns:repeat(4,1fr);gap:8px}.categoryCard{padding:13px 5px}.categoryIcon{font-size:26px}
+ .productGrid{grid-template-columns:repeat(2,1fr);gap:10px}.productImg{height:155px;font-size:55px}.productBody{padding:10px}.productName{font-size:13px}.price{font-size:17px}
+ .features{grid-template-columns:repeat(2,1fr)}.feature{padding:14px}.bannerGrid{grid-template-columns:1fr}.wideBanner{min-height:150px;padding:22px}.wideBanner h3{font-size:22px}.wideBanner .emoji{font-size:60px}
+ .footerGrid{grid-template-columns:1fr 1fr;padding:32px 0 75px}.footerGrid>div:first-child{grid-column:1/-1}.footerBottom{padding-bottom:75px}
+ .mobileBottom{display:flex;position:fixed;bottom:0;left:0;right:0;height:63px;background:#fff;border-top:1px solid var(--line);z-index:80;justify-content:space-around}.mobileBottom button{background:none;color:#4b5563;font-size:11px;font-weight:700}.mobileBottom button div{font-size:21px}
+ .productDetail{grid-template-columns:1fr}.detailImg{min-height:270px;font-size:110px}.detail h2{font-size:25px}
+}
+@media(max-width:430px){.heroSide{grid-template-columns:1fr}.heroSide .miniBanner{min-height:125px}.sectionHead h2{font-size:21px}.timer{transform:scale(.8);transform-origin:right}.categoryGrid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="container row"><div>🇵🇰 Pakistan's modern online marketplace</div><div class="toplinks"><span>Track Order</span><span>Help Center</span><span>Sell on ShopX</span></div></div></div>
+
+<header class="nav">
+ <div class="container navmain">
+  <a class="logo" href="#">shop<span>x</span></a>
+  <div class="searchWrap">
+   <div class="search"><input id="searchInput" placeholder="Search for products, brands and categories..."><button onclick="doSearch()">🔎 Search</button></div>
+   <div id="searchResults" class="searchResults"></div>
+  </div>
+  <div class="actions">
+   <button class="iconbtn" title="Dark mode" onclick="toggleDark()">🌙</button>
+   <button class="iconbtn" title="Wishlist" onclick="showWishlist()">♡<i class="badge" id="wishCount">0</i></button>
+   <button class="iconbtn" title="Cart" onclick="openCart()">🛒<i class="badge" id="cartCount">0</i></button>
+  </div>
+ </div>
+ <div class="categories"><div class="container catrow">
+  <a class="cat active" href="#home">Home</a><a class="cat" href="#electronics">Electronics</a><a class="cat" href="#fashion">Fashion</a><a class="cat" href="#phones">Mobiles</a><a class="cat" href="#gaming">Gaming</a><a class="cat" href="#home-living">Home & Living</a><a class="cat" href="#beauty">Beauty</a><a class="cat" href="#sports">Sports</a><a class="cat" href="#deals">🔥 Flash Deals</a>
+ </div></div>
+</header>
+
+<main id="home">
+<section class="hero"><div class="container heroGrid">
+ <div class="heroMain"><div class="heroContent">
+  <span class="eyebrow">🔥 MEGA SALE — UP TO 70% OFF</span>
+  <h1>Everything you want.<br>Delivered.</h1>
+  <p>Discover thousands of products, unbeatable deals and trusted sellers — all in one modern shopping experience.</p>
+  <button class="btn white" onclick="document.getElementById('products').scrollIntoView()">Shop now →</button>
+ </div></div>
+ <div class="heroSide">
+  <div class="miniBanner one"><div><small>TECH WEEK</small><h2>New Gadgets</h2></div><b>Up to 45% OFF →</b></div>
+  <div class="miniBanner two"><div><small>FASHION DROP</small><h2>Fresh Styles</h2></div><b>Explore collection →</b></div>
+ </div>
+</div></section>
+
+<section class="section"><div class="container"><div class="sectionHead"><div><h2>Shop by category</h2><p>Find what you need faster</p></div><a class="view" href="#products">View all →</a></div>
+ <div class="categoryGrid">
+  <a class="categoryCard" href="#electronics"><div class="categoryIcon">💻</div><b>Electronics</b></a>
+  <a class="categoryCard" href="#phones"><div class="categoryIcon">📱</div><b>Mobiles</b></a>
+  <a class="categoryCard" href="#fashion"><div class="categoryIcon">👕</div><b>Fashion</b></a>
+  <a class="categoryCard" href="#gaming"><div class="categoryIcon">🎮</div><b>Gaming</b></a>
+  <a class="categoryCard" href="#home-living"><div class="categoryIcon">🏠</div><b>Home</b></a>
+  <a class="categoryCard" href="#beauty"><div class="categoryIcon">✨</div><b>Beauty</b></a>
+  <a class="categoryCard" href="#sports"><div class="categoryIcon">⚽</div><b>Sports</b></a>
+  <a class="categoryCard" href="#products"><div class="categoryIcon">🎁</div><b>More</b></a>
+ </div></div></section>
+
+<section class="section" id="deals"><div class="container"><div class="flash">
+ <div class="flashTop"><div><h2>⚡ Flash Deals</h2><small>Limited-time prices</small></div><div class="timer"><div class="time" id="hh">06<small>HRS</small></div><div class="time" id="mm">42<small>MIN</small></div><div class="time" id="ss">18<small>SEC</small></div></div></div>
+ <div class="productGrid" id="dealGrid"></div>
+ </div></div></section>
+
+<section class="section"><div class="container"><div class="features">
+ <div class="feature"><div class="featureIcon">🚚</div><div><b>Fast delivery</b><span>Across Pakistan</span></div></div>
+ <div class="feature"><div class="featureIcon">🔒</div><div><b>Secure checkout</b><span>Safe payments</span></div></div>
+ <div class="feature"><div class="featureIcon">↩️</div><div><b>Easy returns</b><span>Simple return policy</span></div></div>
+ <div class="feature"><div class="featureIcon">🛡️</div><div><b>Trusted sellers</b><span>Quality products</span></div></div>
+ </div></div></section>
+
+<section class="section" id="products"><div class="container">
+ <div class="sectionHead"><div><h2>🔥 Popular products</h2><p>Trending picks from our marketplace</p></div></div>
+ <div class="filters"><button class="filter" onclick="filterProducts('all')">All</button><button class="filter" onclick="filterProducts('Electronics')">Electronics</button><button class="filter" onclick="filterProducts('Fashion')">Fashion</button><button class="filter" onclick="filterProducts('Gaming')">Gaming</button><button class="filter" onclick="filterProducts('Home')">Home</button><select class="filter" onchange="sortProducts(this.value)"><option value="default">Sort: Featured</option><option value="low">Price: Low → High</option><option value="high">Price: High → Low</option><option value="rating">Top Rated</option></select></div>
+ <div class="productGrid" id="productGrid"></div>
+</div></section>
+
+<section class="section" id="fashion"><div class="container"><div class="bannerGrid">
+ <div class="wideBanner"><div><small>STYLE EDIT</small><h3>Upgrade your<br>everyday look.</h3><button class="btn dark" onclick="filterProducts('Fashion')">Shop fashion</button></div><div class="emoji">👟</div></div>
+ <div class="wideBanner"><div><small>SMART HOME</small><h3>Make your<br>home smarter.</h3><button class="btn dark" onclick="filterProducts('Home')">Explore home</button></div><div class="emoji">🏡</div></div>
+ </div></div></section>
+</main>
+
+<footer><div class="container footerGrid">
+ <div><div class="logo">shop<span style="color:#fff">x</span></div><p style="max-width:300px;margin-top:12px">A professional e-commerce frontend template for a modern Pakistani marketplace. Built responsive from the ground up.</p><p>🇵🇰 Made for Pakistan</p></div>
+ <div><h4>Customer</h4><a href="#">Help Center</a><a href="#">Track Order</a><a href="#">Returns</a><a href="#">Shipping</a></div>
+ <div><h4>Marketplace</h4><a href="#">Sell on ShopX</a><a href="#">Seller Center</a><a href="#">Affiliate</a><a href="#">Deals</a></div>
+ <div><h4>Company</h4><a href="#">About</a><a href="#">Careers</a><a href="#">Contact</a><a href="#">Privacy</a></div>
+ <div><h4>Download</h4><p>Get the ShopX app</p><button class="btn primary"> App Store</button><button class="btn dark" style="margin-top:7px">▶ Google Play</button></div>
+</div><div class="container footerBottom"><span>© 2026 ShopX. All rights reserved.</span><span>Cash on Delivery • Cards • Wallets</span></div></footer>
+
+<div class="mobileBottom">
+ <button onclick="location.hash='home'"><div>🏠</div>Home</button><button onclick="document.getElementById('products').scrollIntoView()"><div>🛍️</div>Shop</button><button onclick="showWishlist()"><div>♡</div>Wishlist</button><button onclick="openCart()"><div>🛒</div>Cart</button><button onclick="showAccount()"><div>👤</div>Account</button>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<aside class="drawer" id="cartDrawer"><div class="drawerHead"><h2>🛒 Your Cart</h2><button class="close" onclick="closeCart()">×</button></div><div class="drawerBody" id="cartBody"></div><div class="drawerFoot"><div class="total"><span>Total</span><span id="cartTotal">Rs 0</span></div><button class="btn primary" style="width:100%" onclick="checkout()">Proceed to checkout →</button></div></aside>
+
+<div class="modal" id="productModal"><div class="modalBox"><div style="display:flex;justify-content:flex-end"><button class="close" onclick="closeModal()">×</button></div><div class="productDetail" id="detailContent"></div></div></div>
+
+<div class="modal" id="accountModal"><div class="modalBox" style="max-width:480px"><div style="display:flex;justify-content:space-between;align-items:center"><h2>👤 My Account</h2><button class="close" onclick="closeAccount()">×</button></div><div style="padding:25px 0"><label>Email or phone</label><input class="filter" style="width:100%;margin:7px 0 14px" placeholder="you@example.com"><label>Password</label><input class="filter" style="width:100%;margin:7px 0 14px" type="password" placeholder="••••••••"><button class="btn primary" style="width:100%" onclick="toast('Demo login — connect your backend here!');closeAccount()">Sign in</button><p style="text-align:center;margin-top:15px;color:#6b7280">New here? <b style="color:#ff5a1f">Create an account</b></p></div></div></div>
+
+<div class="modal" id="checkoutModal"><div class="modalBox" style="max-width:600px"><div style="display:flex;justify-content:space-between;align-items:center"><h2>📦 Checkout</h2><button class="close" onclick="closeCheckout()">×</button></div><div style="display:grid;gap:13px;margin-top:20px"><input class="filter" placeholder="Full name"><input class="filter" placeholder="Phone number"><input class="filter" placeholder="Delivery address"><select class="filter"><option>Cash on Delivery</option><option>Card payment (connect gateway)</option><option>Mobile wallet (connect gateway)</option></select><div class="filter" style="background:#fff7ed"><b>Order total:</b> <span id="checkoutTotal">Rs 0</span></div><button class="btn primary" onclick="placeOrder()">Place order</button></div></div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const products=[
+{id:1,name:"Wireless Noise Cancelling Headphones",cat:"Electronics",price:6499,old:8999,rating:4.8,emoji:"🎧",sale:28,desc:"Comfortable wireless headphones with deep bass, long battery life and a modern foldable design."},
+{id:2,name:"Smart Watch Series X",cat:"Electronics",price:3999,old:5999,rating:4.6,emoji:"⌚",sale:33,desc:"Fitness tracking, notifications, sports modes and a bright touchscreen."},
+{id:3,name:"Premium Running Shoes",cat:"Fashion",price:5499,old:7999,rating:4.7,emoji:"👟",sale:31,desc:"Lightweight everyday running shoes designed for comfort and daily movement."},
+{id:4,name:"RGB Mechanical Gaming Keyboard",cat:"Gaming",price:4799,old:6999,rating:4.9,emoji:"⌨️",sale:31,desc:"Mechanical switches, RGB lighting and programmable controls for gaming and work."},
+{id:5,name:"Portable Bluetooth Speaker",cat:"Electronics",price:2899,old:3999,rating:4.5,emoji:"🔊",sale:28,desc:"Compact portable speaker with strong sound and all-day battery."},
+{id:6,name:"Classic Oversized Hoodie",cat:"Fashion",price:2599,old:3499,rating:4.7,emoji:"🧥",sale:26,desc:"Soft everyday hoodie with an oversized fit and premium-feel fabric."},
+{id:7,name:"Gaming Mouse Pro",cat:"Gaming",price:2299,old:3299,rating:4.8,emoji:"🖱️",sale:30,desc:"Fast responsive sensor, adjustable DPI and ergonomic shape."},
+{id:8,name:"Smart LED Desk Lamp",cat:"Home",price:1799,old:2499,rating:4.4,emoji:"💡",sale:28,desc:"Adjustable smart desk lamp with multiple brightness modes."},
+{id:9,name:"5G Android Smartphone",cat:"Electronics",price:42999,old:49999,rating:4.6,emoji:"📱",sale:14,desc:"Modern 5G smartphone with a large display, capable camera and fast charging."},
+{id:10,name:"Minimalist Backpack",cat:"Fashion",price:3199,old:4499,rating:4.5,emoji:"🎒",sale:29,desc:"Water-resistant daily backpack with laptop compartment."},
+{id:11,name:"Wireless Game Controller",cat:"Gaming",price:3499,old:4999,rating:4.7,emoji:"🎮",sale:30,desc:"Comfortable wireless controller for compatible PC and console gaming."},
+{id:12,name:"Air Fryer 5L Digital",cat:"Home",price:9999,old:13999,rating:4.8,emoji:"🍟",sale:29,desc:"Large digital air fryer with presets and adjustable temperature."},
+{id:13,name:"Sports Football",cat:"Sports",price:1999,old:2799,rating:4.6,emoji:"⚽",sale:29,desc:"Durable match-style football for training and recreational play."},
+{id:14,name:"Gaming Headset",cat:"Gaming",price:2999,old:4499,rating:4.6,emoji:"🎧",sale:33,desc:"Immersive stereo gaming headset with microphone."},
+{id:15,name:"Cotton Casual T-Shirt",cat:"Fashion",price:1299,old:1799,rating:4.4,emoji:"👕",sale:28,desc:"Comfortable everyday cotton t-shirt."}
+];
+let cart=JSON.parse(localStorage.getItem("shopx-cart")||"[]");
+let wishlist=JSON.parse(localStorage.getItem("shopx-wishlist")||"[]");
+let activeProducts=[...products];
+
+function money(n){return "Rs "+n.toLocaleString("en-PK")}
+function save(){localStorage.setItem("shopx-cart",JSON.stringify(cart));localStorage.setItem("shopx-wishlist",JSON.stringify(wishlist));updateCounts()}
+function updateCounts(){
+ document.getElementById("cartCount").textContent=cart.reduce((a,x)=>a+x.qty,0);
+ document.getElementById("wishCount").textContent=wishlist.length;
+}
+function card(p){
+ const wished=wishlist.includes(p.id);
+ return `<article class="product">
+  <div class="productImg"><span class="sale">-${p.sale}%</span><button class="wish" onclick="toggleWish(${p.id})">${wished?"❤️":"♡"}</button><span>${p.emoji}</span></div>
+  <div class="productBody"><div class="productName">${p.name}</div>
+  <div class="rating">★★★★★ <span>${p.rating} (128)</span></div>
+  <div class="price">${money(p.price)} <span class="old">${money(p.old)}</span></div>
+  <button class="add" onclick="addCart(${p.id})">＋ Add to cart</button>
+  <button style="width:100%;background:none;color:#6b7280;padding:7px;font-size:12px" onclick="openProduct(${p.id})">View details</button>
+  </div></article>`
+}
+function render(list=activeProducts,target="productGrid"){document.getElementById(target).innerHTML=list.map(card).join("")||'<div class="empty" style="grid-column:1/-1">No products found.</div>'}
+function addCart(id){
+ const p=products.find(x=>x.id===id), found=cart.find(x=>x.id===id);
+ if(found)found.qty++;else cart.push({id,qty:1});
+ save();toast("Added to cart: "+p.name);renderCart();
+}
+function changeQty(id,delta){
+ const x=cart.find(a=>a.id===id);if(!x)return;x.qty+=delta;if(x.qty<=0)cart=cart.filter(a=>a.id!==id);save();renderCart();
+}
+function renderCart(){
+ const body=document.getElementById("cartBody");
+ if(!cart.length){body.innerHTML='<div class="empty"><div style="font-size:55px">🛒</div><h3>Your cart is empty</h3><p>Add something awesome.</p></div>';document.getElementById("cartTotal").textContent="Rs 0";return}
+ let total=0;
+ body.innerHTML=cart.map(x=>{const p=products.find(a=>a.id===x.id);total+=p.price*x.qty;return `<div class="cartItem"><div class="cartImg">${p.emoji}</div><div><b>${p.name}</b><div style="color:#ff5a1f;font-weight:900">${money(p.price)}</div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><b>${x.qty}</b><button onclick="changeQty(${p.id},1)">+</button></div></div><button onclick="changeQty(${p.id},-999)" style="background:none">🗑️</button></div>`}).join("");
+ document.getElementById("cartTotal").textContent=money(total);
+}
+function openCart(){document.getElementById("overlay").classList.add("show");document.getElementById("cartDrawer").classList.add("show");renderCart()}
+function closeCart(){document.getElementById("overlay").classList.remove("show");document.getElementById("cartDrawer").classList.remove("show")}
+function toggleWish(id){if(wishlist.includes(id))wishlist=wishlist.filter(x=>x!==id);else wishlist.push(id);save();render(activeProducts);toast(wishlist.includes(id)?"Added to wishlist":"Removed from wishlist")}
+function showWishlist(){
+ const list=products.filter(p=>wishlist.includes(p.id));openSimpleModal("❤️ Wishlist",list);
+}
+function openSimpleModal(title,list){
+ document.getElementById("detailContent").innerHTML=`<div style="grid-column:1/-1"><h2>${title}</h2><div class="productGrid" style="margin-top:18px">${list.length?list.map(card).join(""):'<div class="empty" style="grid-column:1/-1">Your wishlist is empty.</div>'}</div></div>`;
+ document.getElementById("productModal").classList.add("show");
+}
+function openProduct(id){
+ const p=products.find(x=>x.id===id);
+ document.getElementById("detailContent").innerHTML=`<div class="detailImg">${p.emoji}</div><div class="detail"><span class="eyebrow" style="background:#fff0ea;color:#ff5a1f">${p.cat}</span><h2>${p.name}</h2><div class="rating">★★★★★ <span>${p.rating} • 128 reviews</span></div><div class="detailPrice">${money(p.price)} <span class="old">${money(p.old)}</span></div><p>${p.desc}</p><div class="chips"><span class="chip">🚚 Fast delivery</span><span class="chip">↩️ Easy returns</span><span class="chip">🛡️ Trusted seller</span></div><button class="btn primary" style="width:100%;margin-top:12px" onclick="addCart(${p.id});closeModal()">Add to cart</button></div>`;
+ document.getElementById("productModal").classList.add("show");
+}
+function closeModal(){document.getElementById("productModal").classList.remove("show")}
+function filterProducts(cat){activeProducts=cat==="all"?[...products]:products.filter(p=>p.cat===cat);render(activeProducts);document.getElementById("products").scrollIntoView({behavior:"smooth"});toast("Showing "+(cat==="all"?"all products":cat))}
+function sortProducts(v){let x=[...activeProducts];if(v==="low")x.sort((a,b)=>a.price-b.price);if(v==="high")x.sort((a,b)=>b.price-a.price);if(v==="rating")x.sort((a,b)=>b.rating-a.rating);render(x)}
+function doSearch(){
+ const q=document.getElementById("searchInput").value.trim().toLowerCase();activeProducts=q?products.filter(p=>(p.name+" "+p.cat+" "+p.desc).toLowerCase().includes(q)):[...products];render(activeProducts);document.getElementById("products").scrollIntoView({behavior:"smooth"});document.getElementById("searchResults").style.display="none";
+}
+document.getElementById("searchInput").addEventListener("input",e=>{
+ const q=e.target.value.trim().toLowerCase(),box=document.getElementById("searchResults");
+ if(!q){box.style.display="none";return}
+ const r=products.filter(p=>p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)).slice(0,7);
+ box.innerHTML=r.map(p=>`<div class="result" onclick="openProduct(${p.id});document.getElementById('searchResults').style.display='none'"><span style="font-size:25px">${p.emoji}</span><div><b>${p.name}</b><small style="display:block;color:#6b7280">${p.cat} • ${money(p.price)}</small></div></div>`).join("")||'<div class="empty">No matching products</div>';
+ box.style.display="block";
+});
+document.getElementById("searchInput").addEventListener("keydown",e=>{if(e.key==="Enter")doSearch()});
+function toggleDark(){
+ document.body.classList.toggle("darkMode");
+ const dark=document.body.classList.contains("darkMode");
+ document.documentElement.style.setProperty("--bg",dark?"#090d16":"#f5f7fb");
+ document.documentElement.style.setProperty("--card",dark?"#111827":"#fff");
+ document.documentElement.style.setProperty("--dark",dark?"#f9fafb":"#111827");
+ document.documentElement.style.setProperty("--line",dark?"#273244":"#e5e7eb");
+ document.querySelectorAll(".nav,.categories,.mobileBottom").forEach(x=>x.style.background=dark?"#111827":"#fff");
+ localStorage.setItem("shopx-dark",dark?"1":"0");
+}
+function showAccount(){document.getElementById("accountModal").classList.add("show")}
+function closeAccount(){document.getElementById("accountModal").classList.remove("show")}
+function checkout(){
+ if(!cart.length){toast("Your cart is empty");return}
+ let total=cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0);
+ document.getElementById("checkoutTotal").textContent=money(total);document.getElementById("checkoutModal").classList.add("show");
+}
+function closeCheckout(){document.getElementById("checkoutModal").classList.remove("show")}
+function placeOrder(){cart=[];save();closeCheckout();closeCart();toast("🎉 Demo order placed successfully!")}
+let toastTimer;
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2500)}
+function startTimer(){
+ let seconds=6*3600+42*60+18;
+ setInterval(()=>{if(seconds<=0)seconds=6*3600+42*60+18;seconds--;let h=Math.floor(seconds/3600),m=Math.floor(seconds%3600/60),s=seconds%60;document.getElementById("hh").innerHTML=String(h).padStart(2,"0")+"<small>HRS</small>";document.getElementById("mm").innerHTML=String(m).padStart(2,"0")+"<small>MIN</small>";document.getElementById("ss").innerHTML=String(s).padStart(2,"0")+"<small>SEC</small>"},1000)
+}
+document.getElementById("overlay").addEventListener("click",closeCart);
+document.getElementById("productModal").addEventListener("click",e=>{if(e.target.id==="productModal")closeModal()});
+document.getElementById("accountModal").addEventListener("click",e=>{if(e.target.id==="accountModal")closeAccount()});
+document.getElementById("checkoutModal").addEventListener("click",e=>{if(e.target.id==="checkoutModal")closeCheckout()});
+if(localStorage.getItem("shopx-dark")==="1")toggleDark();
+render(products);render(products.slice(0,5),"dealGrid");renderCart();updateCounts();startTimer();
+</script>
+</body>
+</html>'''
+
+path = Path("/mnt/data/shopx_marketplace.html")
+path.write_text(html, encoding="utf-8")
+print(f"Created {path} ({len(html):,} characters)")
 
